@@ -5,10 +5,12 @@ import { ref } from "vue";
 import CreateSleska from "./components/CreateSleska.vue";
 import ViewSleska from "./components/ViewSleska.vue";
 import HomeSleska from "./components/HomeSleska.vue";
+import SettingSleska from "./components/SettingSleska.vue";
 import connectToDB from "./db.js";
 import { message } from "@tauri-apps/api/dialog";
 
 const mode = ref("home");
+
 const disable = ref(true);
 const connector = ref(true);
 const create = ref(false);
@@ -19,15 +21,15 @@ const connect = async () => {
         "SELECT * FROM sqlite_master WHERE type='table' AND name='sleska';"
     );
     if (data.length === 0) {
-        connector.value = false;
         create.value = true;
+        connector.value = false;
         await message("Необходимо создать базу данных", "Брат:", {
             title: "Tauri",
             type: "warning",
         });
     } else {
-        connector.value = false;
         disable.value = false;
+        connector.value = false;
         await message("Система подключена к базе данных", "Брат:", {
             title: "Tauri",
             type: "warning",
@@ -50,7 +52,7 @@ const creator = async () => {
         title: "Tauri",
         type: "warning",
     });
-    create.value = false;
+    location.reload();
 };
 </script>
 
@@ -74,11 +76,18 @@ const creator = async () => {
         >
             Просмотреть список
         </button>
+        <button
+            v-bind:class="{ active: mode == 'settings' }"
+            @click="mode = 'settings'"
+        >
+            Настройки
+        </button>
     </div>
     <div class="container">
         <HomeSleska v-if="mode == 'home'" />
         <CreateSleska v-if="mode == 'create'" />
         <ViewSleska v-if="mode == 'view'" />
+        <SettingSleska v-if="mode == 'settings'" />
         <button v-if="connector" @click="connect">Подключиться к базе</button>
         <button v-if="create" @click="creator">Создать базу данных</button>
     </div>
