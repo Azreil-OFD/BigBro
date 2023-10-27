@@ -16,7 +16,7 @@ const create = ref(false);
 const connect = async () => {
     const db = await connectToDB();
     const data = await db.select(
-        "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='sleska'"
+        "SELECT * FROM sqlite_master WHERE type='table' AND name='sleska';"
     );
     if (data.length === 0) {
         connector.value = false;
@@ -38,12 +38,12 @@ const creator = async () => {
     const db = await connectToDB();
     const data = await db.execute(
         `
-        CREATE TABLE IF NOT EXISTS public.sleska
+        CREATE TABLE IF NOT EXISTS sleska 
         (
-            id SERIAL NOT NULL PRIMARY KEY,
-            firstname character varying(50),
-            lastname character varying(50)
-        )
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            firstname TEXT,
+            lastname TEXT
+        );
         `
     );
     await message("База данных создана", "Брат:", {
