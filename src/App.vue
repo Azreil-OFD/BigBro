@@ -44,7 +44,8 @@ const creator = async () => {
         (
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
             firstname TEXT,
-            lastname TEXT
+            lastname TEXT,
+            create_at DATETIME
         );
         `
     );

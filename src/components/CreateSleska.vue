@@ -6,19 +6,14 @@ import connectToDB from "../db.js";
 const greetMsg = ref("");
 const firstname = ref("");
 const lastname = ref("");
-const items = ref([
-    {
-        id: 1,
-        firstname: "dasdas",
-        lastname: "dsadas",
-    },
-]);
 
 async function save() {
     let db = await connectToDB();
     let sac = await db.execute(`
-      INSERT INTO sleska (firstname, lastname)
-      VALUES ('${firstname.value}', '${lastname.value}');`);
+      INSERT INTO sleska (firstname, lastname , create_at)
+      VALUES ('${firstname.value}', '${
+        lastname.value
+    }' ,  '${Date.now().toString()}');`);
 
     if (sac.rowsAffected == 1) {
         firstname.value = "";

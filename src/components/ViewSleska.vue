@@ -51,6 +51,8 @@ async function deleteEleent(id) {
     await reloadData();
 }
 
+setInterval(reloadData, 1000);
+
 async function updateDB() {
     let db = await connectToDB();
     let sac = await db.execute(`
@@ -76,6 +78,7 @@ reloadData();
                 <tr>
                     <th class="px-4 py-2">Имя</th>
                     <th class="px-4 py-2">Фамилия</th>
+                    <th class="px-4 py-2">Время слежки</th>
                     <th class="px-4 py-2">Действие</th>
                 </tr>
             </thead>
@@ -83,6 +86,16 @@ reloadData();
                 <tr v-for="item in items" :key="item.id">
                     <td class="border px-4 py-2">{{ item.firstname }}</td>
                     <td class="border px-4 py-2">{{ item.lastname }}</td>
+                    <td class="border px-4 py-2">
+                        {{
+                            new Date(Date.now() - item.create_at).getHours() -
+                            5
+                        }}:{{
+                            new Date(Date.now() - item.create_at).getMinutes()
+                        }}:{{
+                            new Date(Date.now() - item.create_at).getSeconds()
+                        }}
+                    </td>
                     <td class="border px-4 py-2 table__btn">
                         <button
                             class="delete__btn"
